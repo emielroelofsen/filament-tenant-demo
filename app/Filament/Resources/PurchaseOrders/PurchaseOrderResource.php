@@ -52,7 +52,13 @@ class PurchaseOrderResource extends Resource
                 TextColumn::make('id')->sortable(),
                 TextColumn::make('order_number')->searchable()->sortable(),
                 TextColumn::make('status')->badge()->sortable(),
-                TextColumn::make('purchaseOrderLineItems')
+                /**
+                 * DEBUG: When PurchaseOrderLineItemResource is scoped to tenant, this count
+                 * shows 0 for records that do not belong to the current tenant. However, we
+                 * are on the admin purchase orders resource, so we want to see the correct count
+                 * of line items for each purchase order, regardless of tenant.
+                 */
+                TextColumn::make('lineitems_count')
                     ->label(__('# Line Items'))
                     ->getStateUsing(function ($record) {
                         return $record->purchaseOrderLineItems->count();

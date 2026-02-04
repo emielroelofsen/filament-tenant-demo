@@ -24,7 +24,10 @@ class PurchaseOrderLineItemResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static bool $isScopedToTenant = false;
+    /**
+     * DEBUG: Temporarily disable tenant scoping to allow admin users to see all line items.
+     */
+    // protected static bool $isScopedToTenant = false;
 
     public static function form(Schema $schema): Schema
     {

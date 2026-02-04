@@ -44,6 +44,12 @@ class LineItemsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('id')
             ->columns([
+                /**
+                 * DEBUG:
+                 * The three columns below do not show any value for the records that
+                 * do not belong to the current tenant. This is regardless of whether
+                 * we disable tenant scoping on the PurchaseOrderLineItemResource or not.
+                 */
                 TextColumn::make('product.brand.name')->sortable(),
                 TextColumn::make('product.name')->sortable(),
                 TextColumn::make('sku')
@@ -67,14 +73,14 @@ class LineItemsRelationManager extends RelationManager
                      * a PO that belongs to another tenant: the PurchaseOrder model has a tenancy scope
                      * from the tenant-scoped PurchaseOrderResource, so lazy-loading $record->purchaseOrder
                      * returns null for cross-tenant records.
-                     * 
+                     *
                      * This resulted in an error, which resulted in the relation manager not being displayed.
-                     * 
+                     *
                      * The line below worked in V3, but not in V4 and V5.
-                     * 
+                     *
                      * using $record->purchaseOrder->status is not working.
                      * so we're using $this->getOwnerRecord()->status instead.
-                     * 
+                     *
                      */
                     // ->visible(fn (PurchaseOrderLineItem $record): bool => $record->purchaseOrder->status === 'draft')
                     ->visible(fn (PurchaseOrderLineItem $record): bool => $this->getOwnerRecord()->status === 'draft')
